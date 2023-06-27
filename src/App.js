@@ -1,5 +1,5 @@
 import {Button} from "./Components/Button/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import './App.css';
 
 
@@ -13,6 +13,16 @@ function App() {
     const [maxValue, setMaxValue] = useState(+getStorage("increase") ?? 10);
     const [minValue, setMinValue] = useState(+getStorage("decrease") ?? 0);
     const [step, setStep] = useState(getStorage("step") ?? 1);
+
+    useEffect(() => {
+        if(state > 0) {
+            setDisabled(false);
+            setStorage("disabled", false);
+        } else {
+            setDisabled(true);
+            setStorage("disabled", true);
+        }
+    }, [state])
 
     const increase = () => {
         if(state < maxValue) {
@@ -34,18 +44,12 @@ function App() {
                 setStorage("state", +state-1)
             }
         }
-        if(state === 1) {
-            setDisabled(true);
-            setStorage("disabled", true);
-        }
     }
 
     const reset = () => {
         setState(+minValue);
-        if(state === 0) {
-            setDisabled(true);
-            setStorage("disabled", true);
-        }
+        setStorage("disabled", true);
+        setDisabled(true);
         setStorage("state", +state)
     };
 
